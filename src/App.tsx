@@ -1,31 +1,58 @@
-import './App.css';
-import Product from './Product';
-import type { ProductType } from './types/ProductType';
+import './App.css'
+import { type ChangeEvent, useState } from 'react'
+import type { ProductType } from "./types/ProductType.ts";
 
 function App() {
-    const product1: ProductType = {
-        id: 1,
-        title: "Apple MacBook Air",
-        count: 10,
-        price: 1200,
+    const [product, setProduct] = useState<ProductType>({
+        title: "Bread",
+        price: 35,
+        count: 1,
         is_active: true
-    };
+    });
 
-    const product2: ProductType = {
-        id: 2,
-        title: "Logitech Gaming Mouse",
-        count: 0,
-        price: 50,
-        is_active: false
-    };
+    function changeTitle(e: ChangeEvent<HTMLInputElement>) {
+        setProduct({ ...product, title: e.target.value });
+    }
+
+    function changePrice(e: ChangeEvent<HTMLInputElement>) {
+        setProduct({ ...product, price: +e.target.value });
+    }
+
+    function changeCount(e: ChangeEvent<HTMLInputElement>) {
+        setProduct({ ...product, count: +e.target.value });
+    }
+
+    function changeActive(e: ChangeEvent<HTMLInputElement>) {
+        setProduct({ ...product, is_active: e.target.checked });
+    }
 
     return (
-        <div>
-            <h1>Electronics Store</h1>
-            <Product product={product1} />
+        <>
+            <h3>Product</h3>
+            <p>
+                Title: {product.title} |
+                Price: {product.price} |
+                Count: {product.count} |
+                Status: {product.is_active ? "Active" : "Non active"}
+            </p>
             <hr />
-            <Product product={product2} />
-        </div>
+
+            <div>
+                Title: <input type="text" value={product.title} onChange={changeTitle} />
+            </div>
+
+            <div>
+                Price: <input type="number" value={product.price} onChange={changePrice} />
+            </div>
+
+            <div>
+                Count: <input type="number" value={product.count} onChange={changeCount} />
+            </div>
+
+            <div>
+                Active: <input type="checkbox" checked={product.is_active} onChange={changeActive} />
+            </div>
+        </>
     );
 }
 
