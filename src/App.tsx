@@ -1,9 +1,12 @@
 import './App.css'
 import { type ChangeEvent, useState } from 'react'
 import type { ProductType } from "./types/ProductType.ts";
+import Counter from "./components/Counter/Counter";
+import Button from "./ui/Button";
 
 function App() {
     const [product, setProduct] = useState<ProductType>({
+        id: 1,
         title: "Bread",
         price: 35,
         count: 1,
@@ -51,6 +54,14 @@ function App() {
 
             <div>
                 Active: <input type="checkbox" checked={product.is_active} onChange={changeActive} />
+            </div>
+
+            <hr />
+            <Counter />
+
+            <hr />
+            <div style={{ padding: "20px", textAlign: "center" }}>
+                <Button />
             </div>
         </>
     );
