@@ -1,22 +1,20 @@
+import {useRef, useEffect} from 'react'
 import './App.css'
-import type {ProductType} from "./types/ProductType.ts";
-import Counter from "./components/Counter/Counter.tsx";
+
+// import Button from "./ui/Button.tsx";
 
 function App() {
-    const products:ProductType[] = [
-        {title:"bread",price:40},
-        {title:"milk",price:50},
-    ]
-    const colors:string[] = ["white", "black", "green", "blue"];
+    const refDiv = useRef(null);
+    useEffect(()=>{
+        console.log(refDiv)
+    },[])
     return(
         <>
-            <Counter />
-        {products.map((product:ProductType, index:number)=>{
-            return(<p key={index}>Title: {product.title} Price: {product.price}</p>)
-            })}
-        <ul>{colors.map((color:string, index:number)=>{
-            return(<li key={index}>{color}</li>)
-        })}</ul>
+            <div ref={refDiv}>Block</div>
+            {/*<Button text="Click Me 1" />*/}
+            {/*<Button text="Click Me 2" handler={()=>{*/}
+            {/*    alert("Hello Rect")*/}
+            {/*}} />*/}
         </>
     )
 
