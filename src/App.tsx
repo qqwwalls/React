@@ -3,6 +3,7 @@ import { type ChangeEvent, useState } from 'react'
 import type { ProductType } from "./types/ProductType.ts";
 import Counter from "./components/Counter/Counter";
 import Button from "./ui/Button";
+import UserInputs from "./components/UserInputs/UserInputs";
 
 function App() {
     const [product, setProduct] = useState<ProductType>({
@@ -63,6 +64,9 @@ function App() {
             <div style={{ padding: "20px", textAlign: "center" }}>
                 <Button />
             </div>
+
+            <hr />
+            <UserInputs />
         </>
     );
 }
