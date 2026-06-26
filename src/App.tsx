@@ -1,14 +1,13 @@
-import './App.css'
-import ProductsList from "./components/ProductsList.tsx";
-import CreateProduct from "./components/CreateProduct.tsx";
+import ProductsList from "./components/ProductsList";
+import CreateProduct from "./components/CreateProduct";
 
 function App() {
-    return(
+    return (
         <>
             <ProductsList />
-            <CreateProduct/>
+            <CreateProduct />
         </>
-    )
-
+    );
 }
-export default App
+
+export default App;

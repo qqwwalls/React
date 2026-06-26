@@ -1,10 +1,24 @@
-import products from "../models/products.ts"
-import Product from "./Product.tsx";
-//import {useState} from "react";
+import Product from "./Product";
+import { useProducts } from "../hooks/useProducts";
+
 const ProductsList = () => {
-   // const [listOfProducts, setProducts] = useState<Product[]>([...products]);
-    return (<div className="flex p-8">{products.map(product=>{
-        return (<Product key={product.id} product={product}/>)
-    })}</div>)
-}
-export default ProductsList
+    const { products } = useProducts();
+
+    if (products.length === 0) {
+        return (
+            <div className="p-8 text-center text-gray-500">
+                Список товарів порожній
+            </div>
+        );
+    }
+
+    return (
+        <div className="flex flex-wrap gap-6 p-8 justify-center">
+            {products.map((product) => (
+                <Product key={product.id} product={product} />
+            ))}
+        </div>
+    );
+};
+
+export default ProductsList;

@@ -8,7 +8,7 @@ const Product = (prop:{product:ProductType})=>{
             <img
                 src={image}
                 alt={title}
-                className="w-full h-48 sm:h-56 md:h-64 object-cover"
+                className="w-full h-40 object-contain bg-gray-100"
             />
 
             <div className="p-4 sm:p-5">
