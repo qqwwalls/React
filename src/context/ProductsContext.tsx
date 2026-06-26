@@ -6,4 +6,5 @@ export type ProductsContextType = {
     setProducts: (products: ProductType[]) => void;
 };
 
-export const ProductsContext = createContext<ProductsContextType | null>(null);
+export const ProductsContext =
+    createContext<ProductsContextType | null>(null);
