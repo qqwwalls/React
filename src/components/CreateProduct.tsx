@@ -1,7 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import type { ProductType } from '../models/product';
 
-const AddProduct = () => {
+type CreateProductProps = {
+    onCreateProduct: (product: ProductType) => void;
+};
+
+const CreateProduct = ({ onCreateProduct }: CreateProductProps) => {
     const [product, setProduct] = useState<Partial<ProductType>>({
         title: "",
         price: 0,
@@ -12,8 +16,18 @@ const AddProduct = () => {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        console.log("Додаємо новий товар:", product);
-        alert(`Товар "${product.title}" успішно відправлено (див. консоль)!`);
+        
+        const newProduct: ProductType = {
+            id: Date.now(), // Generate a unique ID
+            title: product.title || "Новий товар",
+            price: product.price || 0,
+            count: product.count || 0,
+            is_active: product.is_active || false,
+            image: product.image || "",
+            id_category: 1
+        };
+
+        onCreateProduct(newProduct);
         
         setProduct({
             title: "",
@@ -102,4 +116,4 @@ const AddProduct = () => {
     );
 };
 
-export default AddProduct;
+export default CreateProduct;
