@@ -1,7 +1,8 @@
 const CreateProduct = ()=>{
-    return(<>
-        {/* Назва */}
-        <div>
+    return(
+        <div className="min-h-screen flex justify-center items-center bg-gray-100">
+        <div className="flex flex-col w-1/2 bg-white p-8 rounded-xl shadow-lg space-y-4">
+        <div >
             <label className="block mb-1 text-sm font-medium">
                 Назва товару
             </label>
@@ -88,6 +89,6 @@ const CreateProduct = ()=>{
         >
             Створити товар
         </button>
-    </>)
+        </div></div>)
 }
 export default CreateProduct;
