@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type ChangeEvent } from 'react';
 import type { ProductType } from '../models/product';
 
 type CreateProductProps = {
@@ -6,36 +6,38 @@ type CreateProductProps = {
 };
 
 const CreateProduct = ({ onCreateProduct }: CreateProductProps) => {
-    const [product, setProduct] = useState<Partial<ProductType>>({
-        title: "",
-        price: 0,
-        count: 0,
-        is_active: false,
-        image: ""
-    });
+    const [title, setTitle] = useState("");
+    const [price, setPrice] = useState<number | string>("");
+    const [count, setCount] = useState<number | string>("");
+    const [image, setImage] = useState("");
+    const [isActive, setIsActive] = useState(false);
+
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
+    const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value);
+    const handleCountChange = (e: ChangeEvent<HTMLInputElement>) => setCount(e.target.value);
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => setImage(e.target.value);
+    const handleIsActiveChange = (e: ChangeEvent<HTMLInputElement>) => setIsActive(e.target.checked);
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         
         const newProduct: ProductType = {
-            id: Date.now(), // Generate a unique ID
-            title: product.title || "Новий товар",
-            price: product.price || 0,
-            count: product.count || 0,
-            is_active: product.is_active || false,
-            image: product.image || "",
+            id: Date.now(),
+            title: title || "Новий товар",
+            price: Number(price) || 0,
+            count: Number(count) || 0,
+            is_active: isActive,
+            image: image || "",
             id_category: 1
         };
 
         onCreateProduct(newProduct);
         
-        setProduct({
-            title: "",
-            price: 0,
-            count: 0,
-            is_active: false,
-            image: ""
-        });
+        setTitle("");
+        setPrice("");
+        setCount("");
+        setImage("");
+        setIsActive(false);
     };
 
     return (
@@ -47,8 +49,8 @@ const CreateProduct = ({ onCreateProduct }: CreateProductProps) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Назва товару</label>
                     <input 
                         type="text" 
-                        value={product.title} 
-                        onChange={e => setProduct({...product, title: e.target.value})}
+                        value={title} 
+                        onChange={handleTitleChange}
                         className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                         placeholder="Наприклад: Ноутбук..."
                         required
@@ -60,8 +62,8 @@ const CreateProduct = ({ onCreateProduct }: CreateProductProps) => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Ціна (₴)</label>
                         <input 
                             type="number" 
-                            value={product.price || ""} 
-                            onChange={e => setProduct({...product, price: Number(e.target.value)})}
+                            value={price} 
+                            onChange={handlePriceChange}
                             className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             placeholder="0"
                             min="0"
@@ -72,8 +74,8 @@ const CreateProduct = ({ onCreateProduct }: CreateProductProps) => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Кількість</label>
                         <input 
                             type="number" 
-                            value={product.count || ""} 
-                            onChange={e => setProduct({...product, count: Number(e.target.value)})}
+                            value={count} 
+                            onChange={handleCountChange}
                             className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                             placeholder="0"
                             min="0"
@@ -85,8 +87,8 @@ const CreateProduct = ({ onCreateProduct }: CreateProductProps) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">URL зображення</label>
                     <input 
                         type="text" 
-                        value={product.image} 
-                        onChange={e => setProduct({...product, image: e.target.value})}
+                        value={image} 
+                        onChange={handleImageChange}
                         className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                         placeholder="https://..."
                     />
@@ -96,8 +98,8 @@ const CreateProduct = ({ onCreateProduct }: CreateProductProps) => {
                     <input 
                         type="checkbox" 
                         id="isActive"
-                        checked={product.is_active} 
-                        onChange={e => setProduct({...product, is_active: e.target.checked})}
+                        checked={isActive} 
+                        onChange={handleIsActiveChange}
                         className="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500 cursor-pointer"
                     />
                     <label htmlFor="isActive" className="text-sm font-medium text-gray-700 cursor-pointer flex-1">
