@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5097/api';
+const BASE_URL = 'http://127.0.0.1:5097/api';
 
 // Допоміжна функція для запиту оновлення токена
 async function refreshAccessToken(): Promise<string | null> {
@@ -12,7 +12,7 @@ async function refreshAccessToken(): Promise<string | null> {
         if (!response.ok) throw new Error('Refresh failed');
 
         const data = await response.json();
-        const newAccessToken = data.accessToken;
+        const newAccessToken = data.Token || data.accessToken || data.token;
         
         localStorage.setItem('accessToken', newAccessToken);
         return newAccessToken;
@@ -51,7 +51,10 @@ export async function customFetch(
     let response = await fetch(`${BASE_URL}${endpoint}`, config);
 
     // 2. Якщо 401 Unauthorized — пробуємо оновити токен
-    if (response.status === 401) {
+    // ВАЖЛИВО: не робимо цього для логіну та рефрешу, щоб уникнути циклів
+    const isAuthRoute = endpoint.includes('/auth/login') || endpoint.includes('/auth/refresh');
+    
+    if (response.status === 401 && !isAuthRoute) {
         const newToken = await refreshAccessToken();
         
         if (newToken) {

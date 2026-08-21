@@ -1,10 +1,11 @@
 import Product from "./Product";
-import { useProducts } from "../hooks/useProducts";
+import { useLoaderData } from "react-router";
+import type { ProductType } from "../types/ProductType";
 
 const ProductsList = () => {
-    const { products } = useProducts();
+    const products = useLoaderData() as ProductType[];
 
-    if (products.length === 0) {
+    if (!products || products.length === 0) {
         return (
             <div className="p-8 text-center text-gray-500">
                 Список товарів порожній

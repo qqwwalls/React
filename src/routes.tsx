@@ -1,13 +1,16 @@
 import { createBrowserRouter } from "react-router";
+import React, { Suspense } from "react";
 import Layout from "@/components/Layout";
 import CategoriesList from "@/components/categories/CategoriesList";
 import ProductsList from "@/components/ProductsList";
-import Contacts from "@/components/pages/Contacts";
 import Search from "@/components/pages/Search";
 import CategoryDetail from "@/components/categories/CategoryDetail";
 import ErrorPage from "@/components/pages/ErrorPage";
 import LoginPage from "@/components/pages/LoginPage";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { customFetch } from "@/api/customFetch";
+
+const Contacts = React.lazy(() => import("@/components/pages/Contacts"));
 
 export const routes = createBrowserRouter([
     {
@@ -17,15 +20,30 @@ export const routes = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <CategoriesList />
+                element: <CategoriesList />,
+                loader: async () => {
+                    const response = await customFetch('/category');
+                    if (!response.ok) throw new Response("Failed to load categories", { status: response.status });
+                    return await response.json();
+                }
             },
             {
                 path: "categories",
-                element: <CategoriesList />
+                element: <CategoriesList />,
+                loader: async () => {
+                    const response = await customFetch('/category');
+                    if (!response.ok) throw new Response("Failed to load categories", { status: response.status });
+                    return await response.json();
+                }
             },
             {
-                path: "categories/:slug",
-                element: <CategoryDetail />
+                path: "categories/:id",
+                element: <CategoryDetail />,
+                loader: async ({ params }) => {
+                    const response = await customFetch(`/category/${params.id}`);
+                    if (!response.ok) throw new Response("Failed to load category", { status: response.status });
+                    return await response.json();
+                }
             },
             {
                 path: "login",
@@ -37,13 +55,24 @@ export const routes = createBrowserRouter([
                 children: [
                     {
                         path: "products",
-                        element: <ProductsList />
+                        element: <ProductsList />,
+                        loader: async () => {
+                            const response = await customFetch('/product');
+                            if (!response.ok) {
+                                throw new Response("Failed to load products", { status: response.status });
+                            }
+                            return await response.json();
+                        }
                     }
                 ]
             },
             {
                 path: "contacts",
-                element: <Contacts />
+                element: (
+                    <Suspense fallback={<div className="p-8 text-center font-bold text-gray-500">Loading contacts...</div>}>
+                        <Contacts />
+                    </Suspense>
+                )
             },
             {
                 path: "search",

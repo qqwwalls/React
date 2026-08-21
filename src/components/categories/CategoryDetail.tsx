@@ -1,40 +1,14 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useNavigate, useLoaderData } from "react-router";
 import type { CategoryType } from "@/types/CategoryType";
-import { MOCK_CATEGORIES } from "@/data/mockCategories";
 
 const CategoryDetail = () => {
-    const { slug } = useParams();
     const navigate = useNavigate();
-
-    const [category, setCategory] = useState<CategoryType | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        if (!slug) return;
-
-        // Имітація завантаження (як у викладача, але без ризику падіння бекенду)
-        setLoading(true);
-        setTimeout(() => {
-            const found = MOCK_CATEGORIES.find(c => c.slug === slug);
-            setCategory(found || null);
-            setLoading(false);
-        }, 400); // 400ms delay for realistic feel
-    }, [slug]);
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-            </div>
-        );
-    }
+    const category = useLoaderData() as CategoryType;
 
     if (!category) {
         return (
             <div className="text-center mt-20">
                 <h2 className="text-3xl font-bold text-gray-900">Category not found</h2>
-                <p className="mt-2 text-gray-500">We couldn't find the category "{slug}".</p>
                 <button onClick={() => navigate('/categories')} className="mt-6 text-blue-600 hover:underline">
                     &larr; Back to categories
                 </button>

@@ -30,8 +30,9 @@ const LoginPage = () => {
             }
 
             const data = await response.json();
-            login(data.accessToken);
-            navigate('/products'); // Або /dashboard
+            // Бекенд повертає { Token: "..." }
+            login(data.Token || data.accessToken || data.token);
+            navigate('/products');
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);

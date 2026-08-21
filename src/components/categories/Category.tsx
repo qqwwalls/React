@@ -11,7 +11,7 @@ const Category = ({ category }: {category:CategoryType}) => {
 
     return (
         <div 
-            onClick={() => navigate(`/categories/${category.slug}`)} 
+            onClick={() => navigate(`/categories/${category.id}`)} 
             className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer group"
         >
             <div className="relative overflow-hidden">

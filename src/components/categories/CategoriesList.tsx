@@ -1,11 +1,10 @@
-import { useEffect, useState, useMemo } from "react";
-import { useSearchParams } from "react-router";
+import { useMemo } from "react";
+import { useSearchParams, useLoaderData } from "react-router";
 import type { CategoryType } from "@/types/CategoryType";
 import Category from "@/components/categories/Category";
-import { MOCK_CATEGORIES } from "@/data/mockCategories";
 
 const CategoriesList = () => {
-    const [categories, setCategories] = useState<CategoryType[]>([]);
+    const categories = useLoaderData() as CategoryType[];
     
     // Використовуємо useSearchParams для пагінації (ідеально для теми React Router!)
     const [searchParams, setSearchParams] = useSearchParams();
@@ -13,10 +12,6 @@ const CategoriesList = () => {
     // Отримуємо поточну сторінку з URL (за замовчуванням 1)
     const currentPage = parseInt(searchParams.get("page") || "1");
     const itemsPerPage = 4;
-    
-    useEffect(() => {
-        setCategories(MOCK_CATEGORIES);
-    }, []);
 
     // Обчислюємо дані для поточної сторінки, використовуючи useMemo для оптимізації
     const { totalPages, currentCategories } = useMemo(() => {
