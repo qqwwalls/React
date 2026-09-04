@@ -7,6 +7,9 @@ import Search from "@/components/pages/Search";
 import CategoryDetail from "@/components/categories/CategoryDetail";
 import ErrorPage from "@/components/pages/ErrorPage";
 import LoginPage from "@/components/pages/LoginPage";
+import RegisterPage from "@/components/pages/RegisterPage";
+import CheckoutPage from "@/components/pages/CheckoutPage";
+import ReviewPage from "@/components/pages/ReviewPage";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { customFetch } from "@/api/customFetch";
 
@@ -50,6 +53,10 @@ export const routes = createBrowserRouter([
                 element: <LoginPage />
             },
             {
+                path: "register",
+                element: <RegisterPage />
+            },
+            {
                 // Захищений роут
                 element: <ProtectedRoute />,
                 children: [
@@ -63,6 +70,14 @@ export const routes = createBrowserRouter([
                             }
                             return await response.json();
                         }
+                    },
+                    {
+                        path: "checkout",
+                        element: <CheckoutPage />
+                    },
+                    {
+                        path: "review",
+                        element: <ReviewPage />
                     }
                 ]
             },

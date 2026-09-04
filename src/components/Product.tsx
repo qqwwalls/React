@@ -1,17 +1,18 @@
 import type {ProductType} from "../types/ProductType.ts";
-
+import { useNavigate } from "react-router";
 
 const Product = (prop:{product:ProductType})=>{
+    const navigate = useNavigate();
     const{id, title, image,is_active,id_category,count, price} = prop.product;
     return (
-        <div className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
             <img
                 src={image}
                 alt={title}
                 className="w-full h-40 object-contain bg-gray-100"
             />
 
-            <div className="p-4 sm:p-5">
+            <div className="p-4 sm:p-5 flex flex-col flex-grow">
                 <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-start">
                     <h2 className="text-lg sm:text-xl font-semibold text-gray-800 break-words">
                         {title}
@@ -28,7 +29,7 @@ const Product = (prop:{product:ProductType})=>{
       </span>
                 </div>
 
-                <div className="mt-4 space-y-2 text-sm text-gray-600">
+                <div className="mt-4 space-y-2 text-sm text-gray-600 flex-grow">
                     <div className="flex justify-between">
                         <span>ID:</span>
                         <span className="font-medium">{id}</span>
@@ -45,13 +46,25 @@ const Product = (prop:{product:ProductType})=>{
                     </div>
                 </div>
 
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <span className="text-2xl sm:text-3xl font-bold text-blue-600">
-        {price} ₴
-      </span>
+                <div className="mt-5 flex flex-col gap-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <span className="text-2xl sm:text-3xl font-bold text-blue-600">
+                            {price} ₴
+                        </span>
 
-                    <button className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:scale-95 transition">
-                        Купити
+                        <button 
+                            onClick={() => navigate('/checkout')}
+                            className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:scale-95 transition font-medium shadow-md shadow-blue-200"
+                        >
+                            Купити
+                        </button>
+                    </div>
+                    
+                    <button 
+                        onClick={() => navigate('/review')}
+                        className="w-full px-4 py-2 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 active:scale-95 transition text-sm font-medium mt-2"
+                    >
+                        Залишити відгук
                     </button>
                 </div>
             </div>

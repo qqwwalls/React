@@ -1,37 +1,44 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { useAuth } from '@/context/AuthContext';
 import { customFetch } from '@/api/customFetch';
 
+type LoginFormData = {
+    email: string;
+    password: string;
+};
+
 const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<LoginFormData>();
+
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
         setError(null);
         setIsLoading(true);
 
         try {
             const response = await customFetch('/auth/login', {
                 method: 'POST',
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify(data),
             });
 
             if (!response.ok) {
-                // Спроба отримати текст помилки від сервера
                 const errorData = await response.json().catch(() => null);
                 throw new Error(errorData?.message || 'Login failed! Please check your credentials.');
             }
 
-            const data = await response.json();
-            // Бекенд повертає { Token: "..." }
-            login(data.Token || data.accessToken || data.token);
+            const responseData = await response.json();
+            login(responseData.Token || responseData.accessToken || responseData.token);
             navigate('/products');
         } catch (err) {
             if (err instanceof Error) {
@@ -56,7 +63,7 @@ const LoginPage = () => {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     {error && (
                         <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium border border-red-100">
                             {error}
@@ -69,12 +76,23 @@ const LoginPage = () => {
                         </label>
                         <input
                             type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all outline-none"
+                            {...register("email", { 
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                    message: "Invalid email format"
+                                }
+                            })}
+                            className={`w-full px-4 py-3 rounded-xl border focus:ring-4 transition-all outline-none ${
+                                errors.email 
+                                ? "border-red-300 focus:border-red-500 focus:ring-red-500/20 bg-red-50" 
+                                : "border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+                            }`}
                             placeholder="you@example.com"
                         />
+                        {errors.email && (
+                            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                        )}
                     </div>
 
                     <div>
@@ -83,12 +101,23 @@ const LoginPage = () => {
                         </label>
                         <input
                             type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 transition-all outline-none"
+                            {...register("password", { 
+                                required: "Password is required",
+                                minLength: {
+                                    value: 6,
+                                    message: "Password must be at least 6 characters"
+                                }
+                            })}
+                            className={`w-full px-4 py-3 rounded-xl border focus:ring-4 transition-all outline-none ${
+                                errors.password 
+                                ? "border-red-300 focus:border-red-500 focus:ring-red-500/20 bg-red-50" 
+                                : "border-gray-200 focus:border-blue-500 focus:ring-blue-500/20"
+                            }`}
                             placeholder="••••••••"
                         />
+                        {errors.password && (
+                            <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                        )}
                     </div>
 
                     <button
@@ -106,7 +135,7 @@ const LoginPage = () => {
 
                 <div className="mt-6 text-center">
                     <p className="text-sm text-gray-500">
-                        Don't have an account? <a href="#" className="font-bold text-blue-600 hover:underline">Contact Admin</a>
+                        Don't have an account? <span onClick={() => navigate('/register')} className="font-bold text-blue-600 hover:underline cursor-pointer">Register here</span>
                     </p>
                 </div>
             </div>
