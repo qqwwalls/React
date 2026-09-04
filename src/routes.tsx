@@ -57,14 +57,6 @@ export const routes = createBrowserRouter([
                 element: <RegisterPage />
             },
             {
-                path: "checkout",
-                element: <CheckoutPage />
-            },
-            {
-                path: "review",
-                element: <ReviewPage />
-            },
-            {
                 // Захищений роут
                 element: <ProtectedRoute />,
                 children: [
@@ -78,6 +70,14 @@ export const routes = createBrowserRouter([
                             }
                             return await response.json();
                         }
+                    },
+                    {
+                        path: "checkout",
+                        element: <CheckoutPage />
+                    },
+                    {
+                        path: "review",
+                        element: <ReviewPage />
                     }
                 ]
             },
