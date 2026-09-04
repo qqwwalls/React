@@ -56,6 +56,7 @@ export const routes = createBrowserRouter([
                 path: "register",
                 element: <RegisterPage />
             },
+
             {
                 // Захищений роут
                 element: <ProtectedRoute />,
