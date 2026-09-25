@@ -1,11 +1,17 @@
-import { useMemo } from "react";
-import { useSearchParams, useLoaderData } from "react-router";
-import type { CategoryType } from "@/types/CategoryType";
+import { useMemo, useEffect } from "react";
+import { useSearchParams } from "react-router";
+import { useCategoryStore } from "@/store/useCategoryStore";
 import Category from "@/components/categories/Category";
 
 const CategoriesList = () => {
-    const categories = useLoaderData() as CategoryType[];
+    const { categories, isLoading, error, fetchCategories } = useCategoryStore();
     
+    useEffect(() => {
+        if (categories.length === 0) {
+            fetchCategories();
+        }
+    }, [categories.length, fetchCategories]);
+
     // Використовуємо useSearchParams для пагінації (ідеально для теми React Router!)
     const [searchParams, setSearchParams] = useSearchParams();
     
@@ -28,8 +34,31 @@ const CategoriesList = () => {
         setSearchParams({ page: newPage.toString() });
     };
 
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-[50vh]">
+                <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="mx-auto max-w-2xl mt-10 p-6 bg-red-50 text-red-600 rounded-2xl text-center border border-red-100">
+                <h3 className="text-xl font-bold mb-2">Помилка</h3>
+                <p>{error}</p>
+                <button 
+                    onClick={() => fetchCategories()}
+                    className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition"
+                >
+                    Спробувати знову
+                </button>
+            </div>
+        );
+    }
+
     if (categories.length === 0) {
-        return <p className="text-center text-gray-500 text-lg mt-10">List is empty</p>;
+        return <p className="text-center text-gray-500 text-lg mt-10">Список категорій порожній</p>;
     }
 
     return (

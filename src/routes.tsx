@@ -23,21 +23,11 @@ export const routes = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <CategoriesList />,
-                loader: async () => {
-                    const response = await customFetch('/category');
-                    if (!response.ok) throw new Response("Failed to load categories", { status: response.status });
-                    return await response.json();
-                }
+                element: <CategoriesList />
             },
             {
                 path: "categories",
-                element: <CategoriesList />,
-                loader: async () => {
-                    const response = await customFetch('/category');
-                    if (!response.ok) throw new Response("Failed to load categories", { status: response.status });
-                    return await response.json();
-                }
+                element: <CategoriesList />
             },
             {
                 path: "categories/:id",
