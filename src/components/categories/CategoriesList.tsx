@@ -1,16 +1,16 @@
 import { useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router";
-import { useCategoryStore } from "@/store/useCategoryStore";
+import { categoryStore } from "@/store/categoryStore";
 import Category from "@/components/categories/Category";
 
 const CategoriesList = () => {
-    const { categories, isLoading, error, fetchCategories } = useCategoryStore();
+    const { categories, loading, error, getCategories } = categoryStore();
     
     useEffect(() => {
         if (categories.length === 0) {
-            fetchCategories();
+            getCategories();
         }
-    }, [categories.length, fetchCategories]);
+    }, [categories.length, getCategories]);
 
     // Використовуємо useSearchParams для пагінації (ідеально для теми React Router!)
     const [searchParams, setSearchParams] = useSearchParams();
@@ -34,7 +34,7 @@ const CategoriesList = () => {
         setSearchParams({ page: newPage.toString() });
     };
 
-    if (isLoading) {
+    if (loading) {
         return (
             <div className="flex justify-center items-center min-h-[50vh]">
                 <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -48,7 +48,7 @@ const CategoriesList = () => {
                 <h3 className="text-xl font-bold mb-2">Помилка</h3>
                 <p>{error}</p>
                 <button 
-                    onClick={() => fetchCategories()}
+                    onClick={() => getCategories()}
                     className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition"
                 >
                     Спробувати знову
